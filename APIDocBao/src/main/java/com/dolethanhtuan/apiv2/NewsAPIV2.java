@@ -3,8 +3,8 @@ package com.dolethanhtuan.apiv2;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,9 +18,12 @@ import com.dolethanhtuan.dto.NewsDTO;
 import com.dolethanhtuan.response.ResponseSuccess;
 import com.dolethanhtuan.service.INewsService;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+
 @RestController
+@Validated
 public class NewsAPIV2 {
-	@Qualifier("newsServiceImpl")
 	@Autowired
 	private INewsService newsService;
 	@GetMapping(path= {"api/news/all/v2"})
@@ -40,7 +43,7 @@ public class NewsAPIV2 {
 		return new ResponseSuccess<>(HttpStatus.OK.value(),"Success",newsService.findAllLikeTitle(txtSearch));
 	}
 	@GetMapping(path="api/news/v2/{id}")
-	public ResponseSuccess<NewsDTO> getNewsById(@PathVariable("id") Integer id) {
+	public ResponseSuccess<NewsDTO> getNewsById(@PathVariable("id") @Min(1) Integer id) {
 		if(id == null)
 			return new ResponseSuccess<>(HttpStatus.BAD_REQUEST.value(), "Error");
 		NewsDTO newsDTO = newsService.findOneById(id);
@@ -53,7 +56,7 @@ public class NewsAPIV2 {
 		return new ResponseSuccess<>(HttpStatus.OK.value(),"Success",newsService.findAllNewsByCate_id(cate_id));
 	}
 	@PostMapping(path="api/news/v2")
-	public ResponseSuccess<NewsDTO> postNews(@RequestBody NewsDTO news) {
+	public ResponseSuccess<NewsDTO> postNews(@Valid @RequestBody NewsDTO news) {
 		if(news.getId() != null)
 			return new ResponseSuccess<>(HttpStatus.BAD_REQUEST.value(), "Error");
 		return new ResponseSuccess<>(HttpStatus.OK.value(),"Posted news success",newsService.insertNews(news));
