@@ -1,4 +1,4 @@
-package com.dolethanhtuan.api;
+package com.dolethanhtuan.apiv2;
 
 import java.util.List;
 
@@ -13,11 +13,11 @@ import com.dolethanhtuan.service.ICategoryService;
 
 @RestController
 
-public class CategoryAPI {
+public class CategoryAPIV2 {
 	@Autowired
 	private ICategoryService cateService;
 	
-	@GetMapping("api/v1/category/all")
+	@GetMapping("api/category/all/v2")
 	public ResponseSuccess<List<CategoryDTO>> getList(){
 		return new ResponseSuccess<>(HttpStatus.OK.value(), "Get list success",cateService.getListCategory());
 	}

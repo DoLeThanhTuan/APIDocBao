@@ -6,4 +6,5 @@ import com.dolethanhtuan.entity.CategoryEntity;
 
 public interface CategoryRepository extends JpaRepository<CategoryEntity, Integer>{
 	CategoryEntity findOneByCateCode(String cateCode);
+	
 }
